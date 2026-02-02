@@ -1,5 +1,7 @@
 package com.College.College.Management.Entity;
 
+import java.util.UUID;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,8 +10,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import java.util.List;
-import java.util.UUID;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,21 +22,22 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Course {
+public class Faculty {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
-    private String description;
-    private String duration;
-    private String fee;
-    @OneToMany(mappedBy = "course")
-    private List<Student> students;
-
-    @ManyToMany(mappedBy = "courses")
-    private List<Faculty> faculties;
+    private String phoneNumber;
+    private String email;
+    private String address;
+    private String gender;
+    private String department;  
 
     @ManyToMany
-    @JoinTable(name = "course_subject", joinColumns = @JoinColumn(name = "course_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
-    private List<Subject> subjects;
+    @JoinTable(name = "faculty_course", joinColumns = @JoinColumn(name = "faculty_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private List<Course> courses;
+
+    @ManyToMany
+    @JoinTable(name = "faculty_student", joinColumns = @JoinColumn(name = "faculty_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
+    private List<Student> students;
 }

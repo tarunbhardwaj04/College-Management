@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,16 +27,27 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     private String name;
+
     private String phoneNumber;
+
     private String email;
+
     private String address;
+
     private String gender;
+
+    private String batch;
+
+    private String rollNumber;
+
+    private String password;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     private Course course;
-    private String batch;
-    private String rollNumber;
-    private String password;
+
+    @ManyToMany(mappedBy = "students")
+    private List<Faculty> faculties;
 }

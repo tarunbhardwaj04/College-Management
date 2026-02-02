@@ -1,15 +1,13 @@
 package com.College.College.Management.Entity;
 
+import java.util.List;
+import java.util.UUID;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import java.util.List;
-import java.util.UUID;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,21 +20,20 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Course {
+public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
-    private String description;
-    private String duration;
-    private String fee;
-    @OneToMany(mappedBy = "course")
-    private List<Student> students;
+    private String code;
+    private Double credits;
 
-    @ManyToMany(mappedBy = "courses")
+    @ManyToMany(mappedBy = "subjects")
     private List<Faculty> faculties;
 
-    @ManyToMany
-    @JoinTable(name = "course_subject", joinColumns = @JoinColumn(name = "course_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
-    private List<Subject> subjects;
+    @ManyToMany(mappedBy = "subjects")
+    private List<Student> students;
+
+    @ManyToMany(mappedBy = "subjects")
+    private Course course;
 }
