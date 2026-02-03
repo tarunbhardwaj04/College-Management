@@ -1,10 +1,8 @@
 package com.College.College.Management.Entity;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
-
 import com.College.College.Management.Enums.Role;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,5 +34,5 @@ public class User {
     private String password;
 
     @NotNull
-    private List<Role> roles;
+    private Set<Role> roles;
 }
