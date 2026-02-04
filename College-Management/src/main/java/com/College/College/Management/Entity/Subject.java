@@ -26,7 +26,7 @@ public class Subject {
     private UUID id;
     private String name;
     private String code;
-    private Double credits;
+    private Double marks;
 
     @ManyToMany(mappedBy = "subjects")
     private List<Faculty> faculties;

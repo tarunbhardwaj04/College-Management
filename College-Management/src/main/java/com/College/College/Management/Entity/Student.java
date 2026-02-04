@@ -28,6 +28,8 @@ public class Student extends User{
 
     private String batch;
 
+    private String registrationNumber;
+
     private String rollNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
