@@ -1,5 +1,6 @@
 package com.College.College.Management.Entity;
 
+import java.util.UUID;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,7 +9,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import java.util.List;
-import java.util.UUID;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,10 +26,13 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    
     private String name;
-    private String description;
+    
     private String duration;
+    
     private String fee;
+    
     @OneToMany(mappedBy = "course")
     private List<Student> students;
 

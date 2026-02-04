@@ -2,23 +2,25 @@ package com.College.College.Management.Entity;
 
 import java.util.Set;
 import java.util.UUID;
-import com.College.College.Management.Enums.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
+import jakarta.persistence.JoinColumn;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import jakarta.persistence.JoinTable;
 
-@Entity
+@Entity 
 @Getter
-@Setter
-@Builder
+@Setter     
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -31,8 +33,13 @@ public class User {
     private String username;
 
     @NotNull
-    private String password;
+    @Column(unique = true)
+    private String email;
 
     @NotNull
+    private String password;
+
+    @ManyToMany
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 }
