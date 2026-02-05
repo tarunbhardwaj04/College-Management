@@ -15,9 +15,10 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Postman requests ke liye zaroori hai
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.disable()) // Postman requests ke liye zaroori hai
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/register/**").permitAll() // Registration endpoints ko khula rakhein
+                .requestMatchers("/api/auth/register/faculty").permitAll() // Registration endpoints ko khula rakhein
                 .anyRequest().authenticated()
                 ).httpBasic(Customizer.withDefaults());
         return http.build();
