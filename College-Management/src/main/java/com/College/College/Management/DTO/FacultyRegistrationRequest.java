@@ -6,9 +6,5 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class FacultyRegistrationRequest extends BaseDto{
-    private String address;
-    
-    private String gender;
-    
     private String department;  
 }

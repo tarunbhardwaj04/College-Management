@@ -18,4 +18,8 @@ public class BaseDto {
     private String role;
 
     private String phoneNumber;
+
+    private String address;
+    
+    private String gender;
 }

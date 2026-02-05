@@ -35,5 +35,5 @@ public class Subject {
     private List<Student> students;
 
     @ManyToMany(mappedBy = "subjects")
-    private Course course;
+    private List<Course> course;
 }

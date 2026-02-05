@@ -6,10 +6,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class StudentRegistrationRequest extends BaseDto{
-   
-    private String address;
-
-    private String gender;
 
     private String batch;
 

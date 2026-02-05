@@ -42,4 +42,8 @@ public class Student extends User{
     @ManyToMany
     @JoinTable(name = "student_subject", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private List<Subject> subjects;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
 }

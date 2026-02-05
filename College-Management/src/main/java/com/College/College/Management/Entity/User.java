@@ -16,6 +16,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Inheritance;
 
 @Entity 
 @Getter
@@ -23,6 +25,7 @@ import jakarta.persistence.JoinTable;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

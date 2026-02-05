@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+
 import java.util.List;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -42,4 +44,8 @@ public class Course {
     @ManyToMany
     @JoinTable(name = "course_subject", joinColumns = @JoinColumn(name = "course_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private List<Subject> subjects;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
 }
