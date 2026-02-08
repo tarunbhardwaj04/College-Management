@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.College.College.Management.DTO.AdminRegistrationRequest;
 import com.College.College.Management.DTO.FacultyRegistrationRequest;
+import com.College.College.Management.DTO.LoginRequest;
 import com.College.College.Management.DTO.StudentRegistrationRequest;
 import com.College.College.Management.Service.UserService;
 
@@ -33,4 +34,9 @@ public class UserController {
     public ResponseEntity<?> registerAdmin(@RequestBody AdminRegistrationRequest adminRegistrationRequest) {
         return userService.registerAdmin(adminRegistrationRequest);
     }   
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        return userService.adminLogin(loginRequest);
+    }
 }

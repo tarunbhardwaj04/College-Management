@@ -5,5 +5,7 @@ import com.College.College.Management.Entity.Faculty;
 import java.util.UUID;
 
 public interface FacultyRepository extends JpaRepository<Faculty, UUID> {
+
+    Faculty findByEmail(String email);
     
 }

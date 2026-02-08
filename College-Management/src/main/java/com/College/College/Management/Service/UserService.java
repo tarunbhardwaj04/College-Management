@@ -1,5 +1,5 @@
-    package com.College.College.Management.Service;
-    import java.util.HashSet;
+package com.College.College.Management.Service;
+import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.College.College.Management.DTO.AdminRegistrationRequest;
 import com.College.College.Management.DTO.FacultyRegistrationRequest;
+import com.College.College.Management.DTO.LoginRequest;
 import com.College.College.Management.DTO.StudentRegistrationRequest;
 import com.College.College.Management.Entity.Role;
 import com.College.College.Management.Entity.User;
@@ -50,4 +51,28 @@ import com.College.College.Management.Repository.UserRepository;
             }   
             return ResponseEntity.status(HttpStatus.CREATED).body(adminService.registerAdmin(adminRegistrationRequest,new HashSet<Role>()))  ;            
         }    
-    }
+
+        public ResponseEntity<?> adminLogin(LoginRequest loginRequest) {
+            User existUser=userRepository.findByEmail(loginRequest.getEmail());
+            if(existUser==null){
+                throw new RuntimeException("User not found");
+            }   
+            return ResponseEntity.status(HttpStatus.OK).body(adminService.login(loginRequest))  ;            
+        }    
+
+        public ResponseEntity<?> facultyLogin(LoginRequest loginRequest) {
+            User existUser=userRepository.findByEmail(loginRequest.getEmail());
+            if(existUser==null){
+                throw new RuntimeException("User not found");
+            }   
+            return ResponseEntity.status(HttpStatus.OK).body(facultyService.facultyLogin(loginRequest))  ;            
+        }    
+
+        public ResponseEntity<?> studentLogin(LoginRequest loginRequest) {
+            User existUser=userRepository.findByEmail(loginRequest.getEmail());
+            if(existUser==null){
+                throw new RuntimeException("User not found");
+            }   
+            return ResponseEntity.status(HttpStatus.OK).body(studentService.studentLogin(loginRequest))  ;            
+        }    
+    }   
