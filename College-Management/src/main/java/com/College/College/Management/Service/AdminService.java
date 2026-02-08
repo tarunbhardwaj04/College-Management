@@ -19,6 +19,8 @@ import com.College.College.Management.Entity.Role;
 import com.College.College.Management.Repository.AdminRepository;
 import com.College.College.Management.Repository.RoleRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class AdminService {
     @Autowired
@@ -46,7 +48,7 @@ public class AdminService {
         return adminRepository.save(admin);
     }
 
-    
+    @Transactional
     public ResponseEntity<?> login(LoginRequest loginRequest) {
         try {
         Authentication authentication = authenticationManager.authenticate(

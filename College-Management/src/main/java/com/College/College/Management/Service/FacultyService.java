@@ -20,6 +20,8 @@ import com.College.College.Management.Entity.Role;
 import com.College.College.Management.Repository.RoleRepository;
 import com.College.College.Management.Repository.FacultyRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class FacultyService {
     @Autowired
@@ -48,6 +50,7 @@ public class FacultyService {
         return facultyRepository.save(faculty);
     }
 
+    @Transactional
     public ResponseEntity<?> facultyLogin(LoginRequest loginRequest) {
         try {
         Authentication authentication = authenticationManager.authenticate(

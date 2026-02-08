@@ -19,6 +19,8 @@ import com.College.College.Management.Entity.Student;
 import com.College.College.Management.Repository.RoleRepository;
 import com.College.College.Management.Repository.StudentRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class StudentService {
     @Autowired
@@ -45,6 +47,7 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
+    @Transactional
     public ResponseEntity<?> studentLogin(LoginRequest loginRequest) {
         try {
         Authentication authentication = authenticationManager.authenticate(

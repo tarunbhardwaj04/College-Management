@@ -21,7 +21,8 @@ public class SecurityConfiguration {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.disable()) // Postman requests ke liye zaroori hai
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/register/faculty").permitAll() // Registration endpoints ko khula rakhein
+                .requestMatchers("/api/auth/register/**").permitAll()
+                .requestMatchers("/api/auth/login/**").permitAll()
                 .anyRequest().authenticated()
                 ).httpBasic(Customizer.withDefaults());
         return http.build();
