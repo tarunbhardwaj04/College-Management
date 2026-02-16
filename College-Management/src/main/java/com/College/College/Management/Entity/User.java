@@ -15,13 +15,14 @@ import jakarta.persistence.JoinColumn;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Inheritance;
 
-@Entity 
+@Entity
 @Getter
-@Setter     
+@Setter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,7 +30,7 @@ import jakarta.persistence.Inheritance;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;    
+    private UUID id;
 
     @NotNull
     @Column(unique = true)
@@ -42,7 +43,7 @@ public class User {
     @NotNull
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 }

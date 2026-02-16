@@ -1,4 +1,5 @@
 package com.College.College.Management.Service;
+
 import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,66 +14,70 @@ import com.College.College.Management.DTO.StudentRegistrationRequest;
 import com.College.College.Management.Entity.Role;
 import com.College.College.Management.Entity.User;
 import com.College.College.Management.Repository.UserRepository;
-    @Service
-    public class UserService {
-        @Autowired
-        private UserRepository userRepository;
 
-        @Autowired
-        private StudentService studentService;
+@Service
+public class UserService {
+    @Autowired
+    private UserRepository userRepository;
 
-        @Autowired
-        private FacultyService facultyService;
+    @Autowired
+    private StudentService studentService;
 
-        @Autowired
-        private AdminService adminService;
+    @Autowired
+    private FacultyService facultyService;
 
-        public ResponseEntity<?> registerStudent(StudentRegistrationRequest studentRegistrationRequest) {
+    @Autowired
+    private AdminService adminService;
 
-            User existUser=userRepository.findByEmail(studentRegistrationRequest.getEmail());
-            if(existUser!=null){
-                throw new RuntimeException("User already exists");
-            }   
-            return ResponseEntity.status(HttpStatus.CREATED).body(studentService.registerStudent(studentRegistrationRequest,new HashSet<Role>()))  ;            
-        }    
+    public ResponseEntity<?> registerStudent(StudentRegistrationRequest studentRegistrationRequest) {
 
-        public ResponseEntity<?> registerFaculty(FacultyRegistrationRequest facultyRegistrationRequest) {
-            User existUser=userRepository.findByEmail(facultyRegistrationRequest.getEmail());
-            if(existUser!=null){
-                throw new RuntimeException("User already exists");
-            }   
-            return ResponseEntity.status(HttpStatus.CREATED).body(facultyService.registerFaculty(facultyRegistrationRequest,new HashSet<Role>()))  ;            
-        }    
+        User existUser = userRepository.findByEmail(studentRegistrationRequest.getEmail());
+        if (existUser != null) {
+            throw new RuntimeException("User already exists");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(studentService.registerStudent(studentRegistrationRequest, new HashSet<Role>()));
+    }
 
-        public ResponseEntity<?> registerAdmin(AdminRegistrationRequest adminRegistrationRequest) {
-            User existUser=userRepository.findByEmail(adminRegistrationRequest.getEmail());
-            if(existUser!=null){
-                throw new RuntimeException("User already exists");
-            }   
-            return ResponseEntity.status(HttpStatus.CREATED).body(adminService.registerAdmin(adminRegistrationRequest,new HashSet<Role>()))  ;            
-        }    
+    public ResponseEntity<?> registerFaculty(FacultyRegistrationRequest facultyRegistrationRequest) {
+        User existUser = userRepository.findByEmail(facultyRegistrationRequest.getEmail());
+        if (existUser != null) {
+            throw new RuntimeException("User already exists");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(facultyService.registerFaculty(facultyRegistrationRequest, new HashSet<Role>()));
+    }
 
-        public ResponseEntity<?> adminLogin(LoginRequest loginRequest) {
-            User existUser=userRepository.findByEmail(loginRequest.getEmail());
-            if(existUser==null){
-                throw new RuntimeException("User not found");
-            }   
-            return ResponseEntity.status(HttpStatus.OK).body(adminService.login(loginRequest))  ;            
-        }    
+    public ResponseEntity<?> registerAdmin(AdminRegistrationRequest adminRegistrationRequest) {
+        User existUser = userRepository.findByEmail(adminRegistrationRequest.getEmail());
+        if (existUser != null) {
+            throw new RuntimeException("User already exists");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(adminService.registerAdmin(adminRegistrationRequest, new HashSet<Role>()));
+    }
 
-        public ResponseEntity<?> facultyLogin(LoginRequest loginRequest) {
-            User existUser=userRepository.findByEmail(loginRequest.getEmail());
-            if(existUser==null){
-                throw new RuntimeException("User not found");
-            }   
-            return ResponseEntity.status(HttpStatus.OK).body(facultyService.facultyLogin(loginRequest))  ;            
-        }    
+    public ResponseEntity<?> adminLogin(LoginRequest loginRequest) {
+        User existUser = userRepository.findByEmail(loginRequest.getEmail());
+        if (existUser == null) {
+            throw new RuntimeException("User not found in user service");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.login(loginRequest));
+    }
 
-        public ResponseEntity<?> studentLogin(LoginRequest loginRequest) {
-            User existUser=userRepository.findByEmail(loginRequest.getEmail());
-            if(existUser==null){
-                throw new RuntimeException("User not found");
-            }   
-            return ResponseEntity.status(HttpStatus.OK).body(studentService.studentLogin(loginRequest))  ;            
-        }    
-    }   
+    public ResponseEntity<?> facultyLogin(LoginRequest loginRequest) {
+        User existUser = userRepository.findByEmail(loginRequest.getEmail());
+        if (existUser == null) {
+            throw new RuntimeException("User not found");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(facultyService.facultyLogin(loginRequest));
+    }
+
+    public ResponseEntity<?> studentLogin(LoginRequest loginRequest) {
+        User existUser = userRepository.findByEmail(loginRequest.getEmail());
+        if (existUser == null) {
+            throw new RuntimeException("User not found");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(studentService.studentLogin(loginRequest));
+    }
+}

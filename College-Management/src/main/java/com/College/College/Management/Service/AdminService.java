@@ -3,8 +3,6 @@ package com.College.College.Management.Service;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +31,8 @@ public class AdminService {
     private AdminRepository adminRepository;
 
     public Admin registerAdmin(AdminRegistrationRequest adminRegistrationRequest,HashSet<Role> roles) {
-        Role role=roleRepository.findByName("ADMIN");
+        String roleName = "ROLE_" + adminRegistrationRequest.getRole().toUpperCase();
+        Role role=roleRepository.findByName(roleName);
         roles.add(role);
         Admin admin = Admin.builder()
                 .username(adminRegistrationRequest.getName())
@@ -49,7 +48,7 @@ public class AdminService {
     }
 
     @Transactional
-    public ResponseEntity<?> login(LoginRequest loginRequest) {
+    public Admin login(LoginRequest loginRequest) {
         try {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
@@ -60,14 +59,16 @@ public class AdminService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
-        Admin admin = adminRepository.findByEmail(loginRequest.getEmail());
+        Admin admin = adminRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+
+
         
-        return ResponseEntity.ok(admin);
+        return admin;
 
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+            throw new RuntimeException("Invalid email or password");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Login failed: " + e.getMessage());
+            throw new RuntimeException("Login failed: " + e.getMessage());
         }
     }
 }
