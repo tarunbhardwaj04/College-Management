@@ -35,8 +35,18 @@ public class UserController {
         return userService.registerAdmin(adminRegistrationRequest);
     }   
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    @PostMapping("/login/admin")
+    public ResponseEntity<?> adminLogin(@RequestBody LoginRequest loginRequest) {
         return userService.adminLogin(loginRequest);
+    }
+
+    @PostMapping("/login/faculty")
+    public ResponseEntity<?> facultyLogin(@RequestBody LoginRequest loginRequest) {
+        return userService.facultyLogin(loginRequest);
+    }
+
+    @PostMapping("/login/student")
+    public ResponseEntity<?> studentLogin(@RequestBody LoginRequest loginRequest) {
+        return userService.studentLogin(loginRequest);
     }
 }
