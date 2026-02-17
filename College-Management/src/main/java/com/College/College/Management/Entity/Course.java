@@ -32,6 +32,8 @@ public class Course {
     private String name;
     
     private String duration;
+
+    private String code;
     
     private String fee;
     

@@ -11,6 +11,7 @@ import com.College.College.Management.DTO.AdminRegistrationRequest;
 import com.College.College.Management.DTO.FacultyRegistrationRequest;
 import com.College.College.Management.DTO.LoginRequest;
 import com.College.College.Management.DTO.StudentRegistrationRequest;
+import com.College.College.Management.Entity.Department;
 import com.College.College.Management.Entity.Role;
 import com.College.College.Management.Entity.User;
 import com.College.College.Management.Repository.UserRepository;
@@ -54,7 +55,7 @@ public class UserService {
             throw new RuntimeException("User already exists");
         }
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(adminService.registerAdmin(adminRegistrationRequest, new HashSet<Role>()));
+                .body(adminService.registerAdmin(adminRegistrationRequest, new HashSet<Role>(), new HashSet<Department>()));
     }
 
     public ResponseEntity<?> adminLogin(LoginRequest loginRequest) {

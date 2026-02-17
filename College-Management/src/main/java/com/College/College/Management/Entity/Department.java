@@ -9,7 +9,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.ManyToMany;
+
 import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +36,10 @@ public class Department{
     private UUID id;
 
     private String name;
+
+    @ManyToMany(mappedBy = "departments")
+    @JsonIgnore
+    private Set<Admin> admins;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
     private List<Course> courses;
