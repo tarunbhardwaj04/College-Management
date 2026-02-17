@@ -1,10 +1,12 @@
 package com.College.College.Management.Controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,5 +70,25 @@ public class AdminController {
     @PutMapping("/update-faculty")
     public Faculty updateFaculty(@RequestBody Faculty faculty) {
         return adminService.updateFaculty(faculty);
+    }
+
+    @GetMapping("/get-all-students")
+    public List<Student> getAllStudents() {
+        return adminService.getAllStudents();
+    }
+
+    @GetMapping("/get-all-faculties")
+    public List<Faculty> getAllFaculties() {
+        return adminService.getAllFaculties();
+    }
+
+    @GetMapping("/get-all-courses")
+    public List<Course> getAllCourses() {
+        return adminService.getAllCourses();
+    }
+
+    @GetMapping("/get-all-departments")
+    public List<Department> getAllDepartments() {
+        return adminService.getAllDepartments();
     }
 }

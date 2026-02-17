@@ -25,7 +25,6 @@ import com.College.College.Management.Repository.RoleRepository;
 import com.College.College.Management.Repository.StudentRepository;
 import com.College.College.Management.Repository.DepartmentRepository;
 import com.College.College.Management.Repository.FacultyRepository;
-import com.College.College.Management.Repository.CourseRepository;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -45,7 +44,7 @@ public class AdminService {
     @Autowired
     private FacultyRepository facultyRepository;
     @Autowired
-    private CourseRepository courseRepository;
+    private CourseService courseService;
 
     public Admin registerAdmin(AdminRegistrationRequest adminRegistrationRequest, HashSet<Role> roles,
             HashSet<Department> departments) {
@@ -138,17 +137,8 @@ public class AdminService {
         return studentRepository.save(updatedStudent);
     }   
 
-    @Transactional
     public Course updateCourse(Course course) {
-        Course availableCourse = courseRepository.findById(course.getId())
-            .orElseThrow(() -> new RuntimeException("Course not found"));
-        Course updatedCourse = Course.builder()
-            .id(availableCourse.getId())
-            .name(course.getName())
-            .code(course.getCode())
-            .department(course.getDepartment())
-            .build();
-        return courseRepository.save(updatedCourse);
+        return courseService.updateCourse(course);
     }   
 
     @Transactional
@@ -170,15 +160,10 @@ public class AdminService {
         return availableDepartment;
     }
 
-    @Transactional
     public Course deleteCourse(UUID id) {
-        Course availableCourse = courseRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Course not found"));
-        courseRepository.delete(availableCourse);
-        return availableCourse;
+        return courseService.deleteCourse(id);
     }
 
-      @Transactional
     public Student deleteStudent(Student student) {
         Student availableStudent = studentRepository.findById(student.getId())
             .orElseThrow(() -> new RuntimeException("Student not found"));
