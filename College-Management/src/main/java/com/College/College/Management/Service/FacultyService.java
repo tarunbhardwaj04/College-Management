@@ -1,6 +1,8 @@
 package com.College.College.Management.Service;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,4 +74,40 @@ public class FacultyService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Login failed: " + e.getMessage());
         }
     }   
+
+    @Transactional
+    public Faculty updateFaculty(Faculty faculty) {
+        Faculty availableFaculty = facultyRepository.findById(faculty.getId())
+            .orElseThrow(() -> new RuntimeException("Faculty not found"));
+        Faculty updatedFaculty = Faculty.builder()
+            .id(availableFaculty.getId())
+            .username(faculty.getUsername())
+            .email(faculty.getEmail())
+            .phoneNumber(faculty.getPhoneNumber())
+            .address(faculty.getAddress())
+            .gender(faculty.getGender())
+            .department(faculty.getDepartment())
+            .roles(faculty.getRoles())
+            .build();
+        return facultyRepository.save(updatedFaculty);
+    }   
+
+    @Transactional
+    public Faculty deleteFaculty(UUID id) {
+        Faculty availableFaculty = facultyRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Faculty not found"));
+        facultyRepository.delete(availableFaculty);
+        return availableFaculty;
+    }
+
+    @Transactional
+    public Faculty getFaculty(UUID id) {
+        return facultyRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Faculty not found"));
+    }
+
+    @Transactional
+    public List<Faculty> getAllFaculties() {
+        return facultyRepository.findAll();
+    }
 }

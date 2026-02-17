@@ -1,6 +1,8 @@
 package com.College.College.Management.Service;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,5 +70,46 @@ public class StudentService {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Login failed: " + e.getMessage());
         }
+    }
+
+    @Transactional
+    public Student updateStudent(Student student) {
+        Student availableStudent = studentRepository.findById(student.getId())
+            .orElseThrow(() -> new RuntimeException("Student not found"));
+        Student updatedStudent = Student.builder()
+            .id(availableStudent.getId())
+            .username(student.getUsername())
+            .email(student.getEmail())
+            .phoneNumber(student.getPhoneNumber())
+            .address(student.getAddress())
+            .gender(student.getGender())
+            .department(student.getDepartment())
+            .roles(student.getRoles())
+            .build();
+        return studentRepository.save(updatedStudent);
+    }   
+
+    @Transactional
+    public Student deleteStudent(UUID id) {
+        Student availableStudent = studentRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Student not found"));
+        studentRepository.delete(availableStudent);
+        return availableStudent;
+    }
+
+    @Transactional
+    public Student getStudent(UUID id) {
+        return studentRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Student not found"));
+    }
+
+    @Transactional
+    public Student getStudentByEmail(String email) {
+        return studentRepository.findByEmail(email);
+    }
+
+    @Transactional
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll();
     }
 }

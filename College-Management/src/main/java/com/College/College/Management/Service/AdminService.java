@@ -1,6 +1,7 @@
 package com.College.College.Management.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -22,9 +23,7 @@ import com.College.College.Management.Entity.Department;
 import com.College.College.Management.Entity.Faculty;
 import com.College.College.Management.Repository.AdminRepository;
 import com.College.College.Management.Repository.RoleRepository;
-import com.College.College.Management.Repository.StudentRepository;
 import com.College.College.Management.Repository.DepartmentRepository;
-import com.College.College.Management.Repository.FacultyRepository;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -40,11 +39,13 @@ public class AdminService {
     @Autowired
     private DepartmentRepository departmentRepository;
     @Autowired
-    private StudentRepository studentRepository;
-    @Autowired
-    private FacultyRepository facultyRepository;
-    @Autowired
     private CourseService courseService;
+    @Autowired
+    private DepartmentService departmentService;
+    @Autowired
+    private FacultyService facultyService;
+    @Autowired
+    private StudentService studentService;
 
     public Admin registerAdmin(AdminRegistrationRequest adminRegistrationRequest, HashSet<Role> roles,
             HashSet<Department> departments) {
@@ -98,66 +99,30 @@ public class AdminService {
         }
     }
 
-    @Transactional
     public Department addDepartment(Department department) {
-        return departmentRepository.save(department);
+        return departmentService.addDepartment(department);
     }
 
     @Transactional
     public Faculty updateFaculty(Faculty faculty) {
-        Faculty availableFaculty = facultyRepository.findById(faculty.getId())
-            .orElseThrow(() -> new RuntimeException("Faculty not found"));
-        Faculty updatedFaculty = Faculty.builder()
-            .id(availableFaculty.getId())
-            .username(faculty.getUsername())
-            .email(faculty.getEmail())
-            .phoneNumber(faculty.getPhoneNumber())
-            .address(faculty.getAddress())
-            .gender(faculty.getGender())
-            .department(faculty.getDepartment())
-            .roles(faculty.getRoles())
-            .build();
-        return facultyRepository.save(updatedFaculty);
+        return facultyService.updateFaculty(faculty);
     }   
 
     @Transactional
     public Student updateStudent(Student student) {
-        Student availableStudent = studentRepository.findById(student.getId())
-            .orElseThrow(() -> new RuntimeException("Student not found"));
-        Student updatedStudent = Student.builder()
-            .id(availableStudent.getId())
-            .username(student.getUsername())
-            .email(student.getEmail())
-            .phoneNumber(student.getPhoneNumber())
-            .address(student.getAddress())
-            .gender(student.getGender())
-            .department(student.getDepartment())
-            .roles(student.getRoles())
-            .build();
-        return studentRepository.save(updatedStudent);
+        return studentService.updateStudent(student);
     }   
 
     public Course updateCourse(Course course) {
         return courseService.updateCourse(course);
     }   
 
-    @Transactional
     public Department updateDepartment(Department department) {
-        Department availableDepartment = departmentRepository.findById(department.getId())
-            .orElseThrow(() -> new RuntimeException("Department not found"));
-        Department updatedDepartment = Department.builder()
-            .id(availableDepartment.getId())
-            .name(department.getName())
-            .build();
-        return departmentRepository.save(updatedDepartment);
+        return departmentService.updateDepartment(department);
     }
 
-    @Transactional
     public Department deleteDepartment(Department department) {
-        Department availableDepartment = departmentRepository.findById(department.getId())
-            .orElseThrow(() -> new RuntimeException("Department not found"));
-        departmentRepository.delete(availableDepartment);
-        return availableDepartment;
+        return departmentService.deleteDepartment(department.getId());
     }
 
     public Course deleteCourse(UUID id) {
@@ -165,17 +130,26 @@ public class AdminService {
     }
 
     public Student deleteStudent(Student student) {
-        Student availableStudent = studentRepository.findById(student.getId())
-            .orElseThrow(() -> new RuntimeException("Student not found"));
-        studentRepository.delete(availableStudent);
-        return availableStudent;
+        return studentService.deleteStudent(student.getId());
     }   
 
-    @Transactional
     public Faculty deleteFaculty(Faculty faculty) {
-        Faculty availableFaculty = facultyRepository.findById(faculty.getId())
-            .orElseThrow(() -> new RuntimeException("Faculty not found"));
-        facultyRepository.delete(availableFaculty);
-        return availableFaculty;
+        return facultyService.deleteFaculty(faculty.getId());
+    }
+
+    public List<Student> getAllStudents() {
+        return studentService.getAllStudents();
+    }
+
+    public List<Faculty> getAllFaculties() {
+        return facultyService.getAllFaculties();
+    }
+
+    public List<Course> getAllCourses() {
+        return courseService.getAllCourses();
+    }
+
+    public List<Department> getAllDepartments() {
+        return departmentService.getAllDepartments();
     }
 }
