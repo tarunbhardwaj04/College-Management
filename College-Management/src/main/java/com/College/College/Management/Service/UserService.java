@@ -1,6 +1,7 @@
 package com.College.College.Management.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,8 +33,8 @@ public class UserService {
 
     public ResponseEntity<?> registerStudent(StudentRegistrationRequest studentRegistrationRequest) {
 
-        User existUser = userRepository.findByEmail(studentRegistrationRequest.getEmail());
-        if (existUser != null) {
+        Optional<User> existUser = userRepository.findByEmail(studentRegistrationRequest.getEmail());
+        if (existUser.isPresent()) {
             throw new RuntimeException("User already exists");
         }
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -41,8 +42,8 @@ public class UserService {
     }
 
     public ResponseEntity<?> registerFaculty(FacultyRegistrationRequest facultyRegistrationRequest) {
-        User existUser = userRepository.findByEmail(facultyRegistrationRequest.getEmail());
-        if (existUser != null) {
+        Optional<User> existUser = userRepository.findByEmail(facultyRegistrationRequest.getEmail());
+        if (existUser.isPresent()) {
             throw new RuntimeException("User already exists");
         }
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -50,33 +51,34 @@ public class UserService {
     }
 
     public ResponseEntity<?> registerAdmin(AdminRegistrationRequest adminRegistrationRequest) {
-        User existUser = userRepository.findByEmail(adminRegistrationRequest.getEmail());
-        if (existUser != null) {
+        Optional<User> existUser = userRepository.findByEmail(adminRegistrationRequest.getEmail());
+        if (existUser.isPresent()) {
             throw new RuntimeException("User already exists");
         }
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(adminService.registerAdmin(adminRegistrationRequest, new HashSet<Role>(), new HashSet<Department>()));
+                .body(adminService.registerAdmin(adminRegistrationRequest, new HashSet<Role>(),
+                        new HashSet<Department>()));
     }
 
     public ResponseEntity<?> adminLogin(LoginRequest loginRequest) {
-        User existUser = userRepository.findByEmail(loginRequest.getEmail());
-        if (existUser == null) {
+        Optional<User> existUser = userRepository.findByEmail(loginRequest.getEmail());
+        if (existUser.isEmpty()) {
             throw new RuntimeException("User not found in user service");
         }
         return ResponseEntity.status(HttpStatus.OK).body(adminService.login(loginRequest));
     }
 
     public ResponseEntity<?> facultyLogin(LoginRequest loginRequest) {
-        User existUser = userRepository.findByEmail(loginRequest.getEmail());
-        if (existUser == null) {
+        Optional<User> existUser = userRepository.findByEmail(loginRequest.getEmail());
+        if (existUser.isEmpty()) {
             throw new RuntimeException("User not found");
         }
         return ResponseEntity.status(HttpStatus.OK).body(facultyService.facultyLogin(loginRequest));
     }
 
     public ResponseEntity<?> studentLogin(LoginRequest loginRequest) {
-        User existUser = userRepository.findByEmail(loginRequest.getEmail());
-        if (existUser == null) {
+        Optional<User> existUser = userRepository.findByEmail(loginRequest.getEmail());
+        if (existUser.isEmpty()) {
             throw new RuntimeException("User not found");
         }
         return ResponseEntity.status(HttpStatus.OK).body(studentService.studentLogin(loginRequest));
