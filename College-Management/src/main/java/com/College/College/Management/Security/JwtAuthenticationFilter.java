@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.College.College.Management.Configuration.UserDetailImp;
+import com.College.College.Management.Entity.User;
 import com.College.College.Management.Repository.UserRepository;
 
 import jakarta.servlet.FilterChain;
@@ -59,7 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            com.College.College.Management.Entity.User user = userRepository.findByEmail(userEmail)
+            User user = userRepository.findByEmail(userEmail)
                     .orElseThrow(() -> new RuntimeException("User not found"));
             UserDetails userDetails = new UserDetailImp(user);
 

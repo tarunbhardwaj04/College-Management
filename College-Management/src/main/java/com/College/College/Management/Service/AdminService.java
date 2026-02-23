@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.College.College.Management.DTO.AdminRegistrationRequest;
 import com.College.College.Management.DTO.LoginRequest;
+import com.College.College.Management.DTO.LoginResponse;
+import com.College.College.Management.Security.JwtUtils;
 import com.College.College.Management.Entity.Admin;
 import com.College.College.Management.Entity.Course;
 import com.College.College.Management.Entity.Role;
@@ -32,6 +35,8 @@ public class AdminService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtUtils jwtUtils;
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
@@ -78,19 +83,26 @@ public class AdminService {
     }
 
     @Transactional
-    public Admin login(LoginRequest loginRequest) {
+    public LoginResponse login(LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    loginRequest.getEmail(),
-                    loginRequest.getPassword()));
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             Admin admin = adminRepository.findByEmail(loginRequest.getEmail())
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            return admin;
+            String token = jwtUtils.generateToken(admin.getEmail(), authentication.getAuthorities());
+
+            return new LoginResponse(
+                    admin.getId(),
+                    admin.getUsername(),
+                    admin.getEmail(),
+                    admin.getRoles().stream().map(Role::getName).collect(Collectors.toSet()),
+                    token);
 
         } catch (BadCredentialsException e) {
             throw new RuntimeException("Invalid email or password");
@@ -106,16 +118,16 @@ public class AdminService {
     @Transactional
     public Faculty updateFaculty(Faculty faculty) {
         return facultyService.updateFaculty(faculty);
-    }   
+    }
 
     @Transactional
     public Student updateStudent(Student student) {
         return studentService.updateStudent(student);
-    }   
+    }
 
     public Course updateCourse(Course course) {
         return courseService.updateCourse(course);
-    }   
+    }
 
     public Department updateDepartment(Department department) {
         return departmentService.updateDepartment(department);
@@ -131,7 +143,7 @@ public class AdminService {
 
     public Student deleteStudent(Student student) {
         return studentService.deleteStudent(student.getId());
-    }   
+    }
 
     public Faculty deleteFaculty(Faculty faculty) {
         return facultyService.deleteFaculty(faculty.getId());

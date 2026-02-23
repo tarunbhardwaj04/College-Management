@@ -73,7 +73,7 @@ public class UserService {
         if (existUser.isEmpty()) {
             throw new RuntimeException("User not found");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(facultyService.facultyLogin(loginRequest));
+        return facultyService.facultyLogin(loginRequest);
     }
 
     public ResponseEntity<?> studentLogin(LoginRequest loginRequest) {
@@ -81,6 +81,6 @@ public class UserService {
         if (existUser.isEmpty()) {
             throw new RuntimeException("User not found");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(studentService.studentLogin(loginRequest));
+        return studentService.studentLogin(loginRequest);
     }
 }

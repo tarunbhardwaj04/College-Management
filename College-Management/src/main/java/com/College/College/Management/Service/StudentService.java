@@ -3,6 +3,7 @@ package com.College.College.Management.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.College.College.Management.DTO.LoginRequest;
+import com.College.College.Management.DTO.LoginResponse;
+import com.College.College.Management.Security.JwtUtils;
 import com.College.College.Management.DTO.StudentRegistrationRequest;
 import com.College.College.Management.Entity.Role;
 import com.College.College.Management.Entity.Student;
@@ -26,14 +29,17 @@ import jakarta.transaction.Transactional;
 @Service
 public class StudentService {
     @Autowired
-    private AuthenticationManager authenticationManager;    
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtUtils jwtUtils;
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
     private RoleRepository roleRepository;
-    public Student registerStudent(StudentRegistrationRequest studentRegistrationRequest,HashSet<Role> roles) {
-        Role role=roleRepository.findByName("STUDENT");
-        roles.add(role);    
+
+    public Student registerStudent(StudentRegistrationRequest studentRegistrationRequest, HashSet<Role> roles) {
+        Role role = roleRepository.findByName("STUDENT");
+        roles.add(role);
         Student student = Student.builder()
                 .username(studentRegistrationRequest.getName())
                 .email(studentRegistrationRequest.getEmail())
@@ -52,18 +58,25 @@ public class StudentService {
     @Transactional
     public ResponseEntity<?> studentLogin(LoginRequest loginRequest) {
         try {
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), 
-                loginRequest.getPassword()
-            )
-        );
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        
-        Student student = studentRepository.findByEmail(loginRequest.getEmail());
-        
-        return ResponseEntity.ok(student);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            Student student = studentRepository.findByEmail(loginRequest.getEmail());
+
+            String token = jwtUtils.generateToken(student.getEmail(), authentication.getAuthorities());
+
+            LoginResponse response = new LoginResponse(
+                    student.getId(),
+                    student.getUsername(),
+                    student.getEmail(),
+                    student.getRoles().stream().map(Role::getName).collect(Collectors.toSet()),
+                    token);
+
+            return ResponseEntity.ok(response);
 
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
@@ -75,24 +88,24 @@ public class StudentService {
     @Transactional
     public Student updateStudent(Student student) {
         Student availableStudent = studentRepository.findById(student.getId())
-            .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new RuntimeException("Student not found"));
         Student updatedStudent = Student.builder()
-            .id(availableStudent.getId())
-            .username(student.getUsername())
-            .email(student.getEmail())
-            .phoneNumber(student.getPhoneNumber())
-            .address(student.getAddress())
-            .gender(student.getGender())
-            .department(student.getDepartment())
-            .roles(student.getRoles())
-            .build();
+                .id(availableStudent.getId())
+                .username(student.getUsername())
+                .email(student.getEmail())
+                .phoneNumber(student.getPhoneNumber())
+                .address(student.getAddress())
+                .gender(student.getGender())
+                .department(student.getDepartment())
+                .roles(student.getRoles())
+                .build();
         return studentRepository.save(updatedStudent);
-    }   
+    }
 
     @Transactional
     public Student deleteStudent(UUID id) {
         Student availableStudent = studentRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new RuntimeException("Student not found"));
         studentRepository.delete(availableStudent);
         return availableStudent;
     }
@@ -100,7 +113,7 @@ public class StudentService {
     @Transactional
     public Student getStudent(UUID id) {
         return studentRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new RuntimeException("Student not found"));
     }
 
     @Transactional
