@@ -164,4 +164,16 @@ public class AdminService {
     public List<Department> getAllDepartments() {
         return departmentService.getAllDepartments();
     }
+
+    public List<Admin> getAllAdmins() {
+        try{
+            return adminRepository.findAll();
+        }catch(Exception e){
+            throw new RuntimeException("Failed to retrieve admins: " + e.getMessage());
+        }
+    }
+
+    public Course addCourse(Course course) {
+        return courseService.addCourse(course);
+    }
 }

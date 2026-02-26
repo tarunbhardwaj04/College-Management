@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.College.College.Management.Entity.Admin;
 import com.College.College.Management.Entity.Course;
 import com.College.College.Management.Entity.Department;
 import com.College.College.Management.Entity.Faculty;
@@ -21,12 +23,12 @@ import com.College.College.Management.Service.AdminService;
 
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
-@RequestMapping("/admin")
+@RequestMapping("/admin/v1")
 public class AdminController {
-    
+
     @Autowired
     private AdminService adminService;
-    
+
     @PutMapping("/add-department")
     public Department addDepartment(@RequestBody Department department) {
         return adminService.addDepartment(department);
@@ -90,5 +92,15 @@ public class AdminController {
     @GetMapping("/get-all-departments")
     public List<Department> getAllDepartments() {
         return adminService.getAllDepartments();
+    }
+
+    @GetMapping("/get-all-admins")
+    public List<Admin> getAllAdmins() {
+        return adminService.getAllAdmins();
+    }
+
+    @PostMapping("/add-course")
+    public Course addCourse(@RequestBody Course course) {
+        return adminService.addCourse(course);
     }
 }

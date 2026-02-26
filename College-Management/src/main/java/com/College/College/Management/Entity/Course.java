@@ -31,11 +31,11 @@ public class Course {
     
     private String name;
     
-    private String duration;
+    private Double duration;
 
     private String code;
     
-    private String fee;
+    private Double fee;
     
     @OneToMany(mappedBy = "course")
     private List<Student> students;

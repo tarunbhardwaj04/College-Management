@@ -19,18 +19,33 @@ public class CourseService {
 
     @Transactional
     public Course addCourse(Course course) {
-        return courseRepository.save(course);
+        
+        Course availableCourse = courseRepository.findByName(course.getName());
+        if (availableCourse != null) {
+            throw new RuntimeException("Course already exists");
+        }
+        try{
+            return courseRepository.save(course);
+        }catch(Exception e){
+            throw new RuntimeException("Failed to add course: " + e.getMessage());
+        }
     }
 
     @Transactional
     public Course updateCourse(Course course) {
-        Course availableCourse = courseRepository.findById(course.getId())
-            .orElseThrow(() -> new RuntimeException("Course not found"));
+        try{
+            Course availableCourse = courseRepository.findByName(course.getName());
         Course updatedCourse = Course.builder()
             .id(availableCourse.getId())
             .name(course.getName())
+            .duration(course.getDuration())
+            .code(course.getCode())
+            .fee(course.getFee())
             .build();
         return courseRepository.save(updatedCourse);
+        }catch(Exception e){
+            throw new RuntimeException("Failed to update course: " + e.getMessage());
+        }
     }
 
     @Transactional
