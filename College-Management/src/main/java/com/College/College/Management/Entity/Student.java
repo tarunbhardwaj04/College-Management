@@ -5,6 +5,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.ManyToMany;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -46,4 +47,7 @@ public class Student extends User{
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
+
+    @OneToMany(mappedBy = "student")
+    private List<Result> results;
 }
