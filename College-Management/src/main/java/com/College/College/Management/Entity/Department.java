@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -46,4 +47,8 @@ public class Department{
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
     private List<Student> students;
+
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Set<Faculty> faculties;
 }

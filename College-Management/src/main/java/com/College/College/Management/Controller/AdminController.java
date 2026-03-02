@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.College.College.Management.Entity.Admin;
+import com.College.College.Management.DTO.AdminResponse;
+import com.College.College.Management.DTO.DepartmentResponse;
 import com.College.College.Management.Entity.Course;
 import com.College.College.Management.Entity.Department;
 import com.College.College.Management.Entity.Faculty;
@@ -90,12 +91,12 @@ public class AdminController {
     }
 
     @GetMapping("/get-all-departments")
-    public List<Department> getAllDepartments() {
+    public List<DepartmentResponse> getAllDepartments() {
         return adminService.getAllDepartments();
     }
 
     @GetMapping("/get-all-admins")
-    public List<Admin> getAllAdmins() {
+    public List<AdminResponse> getAllAdmins() {
         return adminService.getAllAdmins();
     }
 

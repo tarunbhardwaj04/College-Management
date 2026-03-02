@@ -2,10 +2,12 @@ package com.College.College.Management.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.College.College.Management.DTO.DepartmentResponse;
 import com.College.College.Management.Entity.Department;
 import com.College.College.Management.Repository.DepartmentRepository;
 
@@ -53,7 +55,15 @@ public class DepartmentService {
     }
 
     @Transactional
-    public List<Department> getAllDepartments() {
-        return departmentRepository.findAll();
+    public List<DepartmentResponse> getAllDepartments() {
+        List<Department> departments = departmentRepository.findAll();
+        return departments.stream().map(department -> DepartmentResponse.builder()
+            .id(department.getId())
+            .name(department.getName())
+            .faculties(department.getFaculties().stream().map(faculty -> faculty.getUsername()).collect(Collectors.toSet()))
+            .students(department.getStudents().stream().map(student -> student.getUsername()).collect(Collectors.toSet()))
+            .admins(department.getAdmins().stream().map(admin -> admin.getUsername()).collect(Collectors.toSet()))
+            .courses(department.getCourses().stream().map(course -> course.getName()).collect(Collectors.toSet()))
+            .build()).collect(Collectors.toList());
     }
 }

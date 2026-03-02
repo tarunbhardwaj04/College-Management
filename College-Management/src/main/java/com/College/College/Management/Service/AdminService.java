@@ -15,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.College.College.Management.DTO.AdminRegistrationRequest;
+import com.College.College.Management.DTO.AdminResponse;
+import com.College.College.Management.DTO.DepartmentResponse;
 import com.College.College.Management.DTO.LoginRequest;
 import com.College.College.Management.DTO.LoginResponse;
 import com.College.College.Management.Security.JwtUtils;
@@ -161,13 +163,18 @@ public class AdminService {
         return courseService.getAllCourses();
     }
 
-    public List<Department> getAllDepartments() {
+    public List<DepartmentResponse> getAllDepartments() {
         return departmentService.getAllDepartments();
     }
 
-    public List<Admin> getAllAdmins() {
+    public List<AdminResponse> getAllAdmins() {
         try{
-            return adminRepository.findAll();
+            return adminRepository.findAll().stream().map(admin -> AdminResponse.builder()
+                .id(admin.getId())
+                .username(admin.getUsername())
+                .email(admin.getEmail())
+                .roles(admin.getRoles().stream().map(Role::getName).collect(Collectors.toSet()))
+                .build()).collect(Collectors.toList());
         }catch(Exception e){
             throw new RuntimeException("Failed to retrieve admins: " + e.getMessage());
         }
@@ -176,4 +183,6 @@ public class AdminService {
     public Course addCourse(Course course) {
         return courseService.addCourse(course);
     }
+
+    
 }

@@ -20,9 +20,11 @@ import com.College.College.Management.DTO.FacultyRegistrationRequest;
 import com.College.College.Management.DTO.LoginRequest;
 import com.College.College.Management.DTO.LoginResponse;
 import com.College.College.Management.Security.JwtUtils;
+import com.College.College.Management.Entity.Department;
 import com.College.College.Management.Entity.Faculty;
 import com.College.College.Management.Entity.Role;
 import com.College.College.Management.Entity.Subject;
+import com.College.College.Management.Repository.DepartmentRepository;
 import com.College.College.Management.Repository.RoleRepository;
 import com.College.College.Management.Repository.FacultyRepository;
 import com.College.College.Management.Repository.SubjectRepository;
@@ -42,11 +44,18 @@ public class FacultyService {
     private FacultyRepository facultyRepository;
     @Autowired
     private SubjectRepository subjectRepository;
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
     public Faculty registerFaculty(FacultyRegistrationRequest facultyRegistrationRequest, HashSet<Role> roles) {
         String roleName = "ROLE_" + facultyRegistrationRequest.getRole().toUpperCase();
         Role role = roleRepository.findByName(roleName);
         roles.add(role);
+
+         String departmentNames = facultyRegistrationRequest.getDepartment();
+        Department department = departmentRepository.findByName(departmentNames)
+                .orElseGet(() -> departmentRepository.save(Department.builder().name(departmentNames).build()));
+
         Faculty faculty = Faculty.builder()
                 .username(facultyRegistrationRequest.getName())
                 .email(facultyRegistrationRequest.getEmail())
@@ -54,7 +63,7 @@ public class FacultyService {
                 .phoneNumber(facultyRegistrationRequest.getPhoneNumber())
                 .address(facultyRegistrationRequest.getAddress())
                 .gender(facultyRegistrationRequest.getGender())
-                .department(facultyRegistrationRequest.getDepartment())
+                .department(department)
                 .roles(roles)
                 .build();
         return facultyRepository.save(faculty);
