@@ -43,9 +43,11 @@ public class Department{
     private Set<Admin> admins;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Course> courses;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Student> students;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)

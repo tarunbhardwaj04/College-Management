@@ -1,5 +1,7 @@
 package com.College.College.Management.DTO;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -8,11 +10,13 @@ public class CourseRequest {
 
     private Integer semester;
 
-    private Double fees;
+    private Double fee;
+
+    private String code;
 
     private String departmentName;
 
     private Double duration;
     
-    private String facultyname;
+    private List<String> facultyName;
 }

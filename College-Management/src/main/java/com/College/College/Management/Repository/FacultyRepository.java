@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.College.College.Management.Entity.Faculty;
 import com.College.College.Management.Entity.Subject;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface FacultyRepository extends JpaRepository<Faculty, UUID> {
@@ -11,5 +12,7 @@ public interface FacultyRepository extends JpaRepository<Faculty, UUID> {
     Faculty findByEmail(String email);
 
     Faculty findBySubjects(Subject subject);
+
+    List<Faculty> findByUsernameInAndDepartment_Name(List<String> name, String departmentName);
     
 }
