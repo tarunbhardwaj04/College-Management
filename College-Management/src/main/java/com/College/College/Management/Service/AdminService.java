@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.College.College.Management.DTO.AdminRegistrationRequest;
 import com.College.College.Management.DTO.AdminResponse;
+import com.College.College.Management.DTO.CourseRequest;
 import com.College.College.Management.DTO.DepartmentResponse;
 import com.College.College.Management.DTO.LoginRequest;
 import com.College.College.Management.DTO.LoginResponse;
@@ -180,8 +181,8 @@ public class AdminService {
         }
     }
 
-    public Course addCourse(Course course) {
-        return courseService.addCourse(course);
+    public Course addCourse(CourseRequest courseRequest) {
+        return courseService.addCourse(courseRequest);
     }
 
     

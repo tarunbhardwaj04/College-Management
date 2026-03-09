@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.College.College.Management.DTO.CourseRequest;
 import com.College.College.Management.Entity.Course;
 import com.College.College.Management.Repository.CourseRepository;
 
@@ -18,13 +19,19 @@ public class CourseService {
     private CourseRepository courseRepository;
 
     @Transactional
-    public Course addCourse(Course course) {
+    public Course addCourse(CourseRequest courseRequest) {
         
-        Course availableCourse = courseRepository.findByName(course.getName());
+        Course availableCourse = courseRepository.findByName(courseRequest.getName());
         if (availableCourse != null) {
             throw new RuntimeException("Course already exists");
         }
         try{
+            Course course = Course.builder()
+                .name(courseRequest.getName())
+                .semester(courseRequest.getSemester())
+                .fee(courseRequest.getFees())
+                .duration(courseRequest.getDuration())
+                .build();
             return courseRepository.save(course);
         }catch(Exception e){
             throw new RuntimeException("Failed to add course: " + e.getMessage());

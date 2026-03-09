@@ -37,6 +37,8 @@ public class Course {
     
     private Double fee;
     
+    private Integer semester;
+    
     @OneToMany(mappedBy = "course")
     private List<Student> students;
 

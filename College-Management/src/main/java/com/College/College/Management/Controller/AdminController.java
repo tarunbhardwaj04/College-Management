@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.College.College.Management.DTO.AdminResponse;
+import com.College.College.Management.DTO.CourseRequest;
 import com.College.College.Management.DTO.DepartmentResponse;
 import com.College.College.Management.Entity.Course;
 import com.College.College.Management.Entity.Department;
@@ -101,7 +102,7 @@ public class AdminController {
     }
 
     @PostMapping("/add-course")
-    public Course addCourse(@RequestBody Course course) {
-        return adminService.addCourse(course);
+    public Course addCourse(@RequestBody CourseRequest courseRequest) {
+        return adminService.addCourse(courseRequest);
     }
 }
