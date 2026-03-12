@@ -1,12 +1,15 @@
 package com.College.College.Management.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.College.College.Management.DTO.AdminRegistrationRequest;
 import com.College.College.Management.DTO.AdminResponse;
 import com.College.College.Management.DTO.CourseRequest;
+import com.College.College.Management.DTO.CourseResponse;
 import com.College.College.Management.DTO.DepartmentResponse;
 import com.College.College.Management.DTO.LoginRequest;
 import com.College.College.Management.DTO.LoginResponse;
@@ -136,52 +140,53 @@ public class AdminService {
         return departmentService.updateDepartment(department);
     }
 
-    public Department deleteDepartment(Department department) {
-        return departmentService.deleteDepartment(department.getId());
+    public Department deleteDepartment(UUID id) {
+        return departmentService.deleteDepartment(id);
     }
 
     public Course deleteCourse(UUID id) {
         return courseService.deleteCourse(id);
     }
 
-    public Student deleteStudent(Student student) {
-        return studentService.deleteStudent(student.getId());
+    public Student deleteStudent(UUID id) {
+        return studentService.deleteStudent(id);
     }
 
-    public Faculty deleteFaculty(Faculty faculty) {
-        return facultyService.deleteFaculty(faculty.getId());
+    public Faculty deleteFaculty(UUID id) {
+        return facultyService.deleteFaculty(id);
     }
 
-    public List<Student> getAllStudents() {
+    public Page<Student> getAllStudents() {
         return studentService.getAllStudents();
     }
 
-    public List<Faculty> getAllFaculties() {
+    public Page<Faculty> getAllFaculties() {
         return facultyService.getAllFaculties();
     }
 
-    public List<Course> getAllCourses() {
+    public Page<Course> getAllCourses() {
         return courseService.getAllCourses();
     }
 
-    public List<DepartmentResponse> getAllDepartments() {
+    public Page<DepartmentResponse> getAllDepartments() {
         return departmentService.getAllDepartments();
     }
 
-    public List<AdminResponse> getAllAdmins() {
+    public Page<AdminResponse> getAllAdmins() {
         try{
-            return adminRepository.findAll().stream().map(admin -> AdminResponse.builder()
+            Pageable pageable = PageRequest.of(0, 10).withSort(Sort.by("name").ascending());
+            return adminRepository.findAll(pageable).map(admin -> AdminResponse.builder()
                 .id(admin.getId())
                 .username(admin.getUsername())
                 .email(admin.getEmail())
                 .roles(admin.getRoles().stream().map(Role::getName).collect(Collectors.toSet()))
-                .build()).collect(Collectors.toList());
+                .build());
         }catch(Exception e){
             throw new RuntimeException("Failed to retrieve admins: " + e.getMessage());
         }
     }
 
-    public Course addCourse(CourseRequest courseRequest) {
+    public CourseResponse addCourse(CourseRequest courseRequest) {
         return courseService.addCourse(courseRequest);
     }
 

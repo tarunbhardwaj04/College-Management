@@ -1,11 +1,14 @@
 package com.College.College.Management.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -131,11 +134,12 @@ public class FacultyService {
     }
 
     @Transactional
-    public List<Faculty> getAllFaculties() {
-        return facultyRepository.findAll();
+    public Page<Faculty> getAllFaculties() {
+        Pageable pageable = PageRequest.of(0, 10).withSort(Sort.by("name").ascending());
+        return facultyRepository.findAll(pageable);
     }
 
-    @Transactional
+    @Transactional  
     public Faculty getFacultyBySubject(String subject) {
         Subject existingSubject = subjectRepository.findByName(subject).orElseThrow(() -> new RuntimeException("Subject not found"));
         return facultyRepository.findBySubjects(existingSubject);

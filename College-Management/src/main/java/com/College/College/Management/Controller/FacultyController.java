@@ -5,12 +5,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+
 import com.College.College.Management.Entity.Faculty;
 import com.College.College.Management.Service.FacultyService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -20,7 +21,7 @@ public class FacultyController {
     private FacultyService facultyService;
     
     @GetMapping
-    public ResponseEntity<List<Faculty>> getAllFaculties() {
+    public ResponseEntity<Page<Faculty>> getAllFaculties() {
         return new ResponseEntity<>(facultyService.getAllFaculties(), HttpStatus.OK);
     }
 

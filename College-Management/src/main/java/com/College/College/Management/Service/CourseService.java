@@ -4,9 +4,14 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.College.College.Management.DTO.CourseRequest;
+import com.College.College.Management.DTO.CourseResponse;
 import com.College.College.Management.Entity.Course;
 import com.College.College.Management.Entity.Department;
 import com.College.College.Management.Entity.Faculty;
@@ -29,7 +34,7 @@ public class CourseService {
     private FacultyRepository facultyRepository;
 
     @Transactional
-public Course addCourse(CourseRequest courseRequest) {
+public CourseResponse addCourse(CourseRequest courseRequest) {
     if (courseRepository.findByName(courseRequest.getName()) != null) {
         throw new RuntimeException("Course with name " + courseRequest.getName() + " already exists");
     }
@@ -54,8 +59,18 @@ public Course addCourse(CourseRequest courseRequest) {
                 .department(department)
                 .faculties(facultyList)
                 .build();
+        courseRepository.save(course);
 
-        return courseRepository.save(course);
+        return CourseResponse.builder()
+                .id(course.getId())
+                .name(course.getName())
+                .code(course.getCode())
+                .semester(course.getSemester())
+                .fee(course.getFee())
+                .duration(course.getDuration())
+                .departmentName(course.getDepartment().getName())
+                .facultyName(course.getFaculties().stream().map(Faculty::getUsername).toList())
+                .build();
         
     } catch (Exception e) {
         throw new RuntimeException("Database error while saving course: " + e.getMessage());
@@ -94,7 +109,8 @@ public Course addCourse(CourseRequest courseRequest) {
     }
 
     @Transactional
-    public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+    public Page<Course> getAllCourses() {
+        Pageable pageable = PageRequest.of(0, 10).withSort(Sort.by("name").ascending());
+        return courseRepository.findAll(pageable);
     }
 }

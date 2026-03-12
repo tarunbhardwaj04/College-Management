@@ -1,21 +1,22 @@
 package com.College.College.Management.Controller;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.College.College.Management.DTO.AdminResponse;
 import com.College.College.Management.DTO.CourseRequest;
+import com.College.College.Management.DTO.CourseResponse;
 import com.College.College.Management.DTO.DepartmentResponse;
 import com.College.College.Management.Entity.Course;
 import com.College.College.Management.Entity.Department;
@@ -36,24 +37,24 @@ public class AdminController {
         return adminService.addDepartment(department);
     }
 
-    @DeleteMapping("/delete-department")
-    public void deleteDepartment(@RequestBody Department department) {
-        adminService.deleteDepartment(department);
+    @DeleteMapping("/delete-department/{id}")
+    public void deleteDepartment(@PathVariable UUID id) {
+        adminService.deleteDepartment(id);
     }
 
-    @DeleteMapping("/delete-course")
-    public void deleteCourse(@RequestParam UUID id) {
+    @DeleteMapping("/delete-course/{id}")
+    public void deleteCourse(@PathVariable UUID id) {
         adminService.deleteCourse(id);
     }
 
-    @DeleteMapping("/delete-student")
-    public void deleteStudent(@RequestBody Student student) {
-        adminService.deleteStudent(student);
+    @DeleteMapping("/delete-student/{id}")
+    public void deleteStudent(@PathVariable UUID id) {
+        adminService.deleteStudent(id);
     }
 
-    @DeleteMapping("/delete-faculty")
-    public void deleteFaculty(@RequestBody Faculty faculty) {
-        adminService.deleteFaculty(faculty);
+    @DeleteMapping("/delete-faculty/{id}")
+    public void deleteFaculty(@PathVariable UUID id) {
+        adminService.deleteFaculty(id);
     }
 
     @PutMapping("/update-department")
@@ -77,32 +78,32 @@ public class AdminController {
     }
 
     @GetMapping("/get-all-students")
-    public List<Student> getAllStudents() {
+    public Page<Student> getAllStudents() {
         return adminService.getAllStudents();
     }
 
     @GetMapping("/get-all-faculties")
-    public List<Faculty> getAllFaculties() {
+    public Page<Faculty> getAllFaculties() {
         return adminService.getAllFaculties();
     }
 
     @GetMapping("/get-all-courses")
-    public List<Course> getAllCourses() {
+    public Page<Course> getAllCourses() {
         return adminService.getAllCourses();
     }
 
     @GetMapping("/get-all-departments")
-    public List<DepartmentResponse> getAllDepartments() {
+    public Page<DepartmentResponse> getAllDepartments() {
         return adminService.getAllDepartments();
     }
 
     @GetMapping("/get-all-admins")
-    public List<AdminResponse> getAllAdmins() {
+    public Page<AdminResponse> getAllAdmins() {
         return adminService.getAllAdmins();
     }
 
     @PostMapping("/add-course")
-    public Course addCourse(@RequestBody CourseRequest courseRequest) {
+    public CourseResponse addCourse(@RequestBody CourseRequest courseRequest) {
         return adminService.addCourse(courseRequest);
     }
 }
